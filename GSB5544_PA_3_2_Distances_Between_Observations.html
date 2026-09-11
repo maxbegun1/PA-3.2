@@ -2244,7 +2244,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <p>In addition to writing and running code, be sure to examine any output and interpret the results before moving on.</p>
 <p>For many of these questions, there are several approaches, and there is no single right answer. You should try a few different things and compare with your classmates.</p>
 <p>We will use <code>scikit-learn</code> extensively later, but for this activity you might want to stick with <code>pandas</code>.</p>
-<div id="cell-3" class="cell" data-execution_count="21">
+<div id="cell-3" class="cell" data-execution_count="37">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -2253,15 +2253,15 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <p>1. Suppose that you really like house 0 in the Ames housing data set, but it is too expensive. Find cheaper homes that are similar to it — in terms of living area, number of bedrooms, number of bathrooms — by calculating distances from house 0. You might want to try different distance metrics and different scaling methods; how sensitive are your results to these choices?</p>
 <p>Be sure to actually look at the profiles of the homes that your algorithm picked out as most similar (based on these 3 variables). Do they make sense?</p>
 <p><em>Think:</em> If the goal is to find a “good deal” on a similar house, should sale price be included as a variable in your distance metric?</p>
-<div id="cell-6" class="cell" data-execution_count="22">
+<div id="cell-6" class="cell" data-execution_count="38">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_ames <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://dlsun.github.io/pods/data/AmesHousing.txt&quot;</span>, sep <span class="op">=</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df_ames.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>(2930, 82)</code></pre>
 </div>
 </div>
-<div id="cell-7" class="cell" data-execution_count="23">
+<div id="cell-7" class="cell" data-execution_count="39">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df_ames[<span class="st">&quot;Bathrooms&quot;</span>] <span class="op">=</span> df_ames[<span class="st">&quot;Full Bath&quot;</span>] <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span>df_ames[<span class="st">&quot;Half Bath&quot;</span>]</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">&quot;Gr Liv Area&quot;</span>, <span class="st">&quot;Bedroom AbvGr&quot;</span>, <span class="st">&quot;Bathrooms&quot;</span>,</span>
@@ -2269,7 +2269,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>distance_features <span class="op">=</span> [<span class="st">&quot;Gr Liv Area&quot;</span>, <span class="st">&quot;Bedroom AbvGr&quot;</span>, <span class="st">&quot;Bathrooms&quot;</span>, <span class="st">&quot;Year Built&quot;</span>, <span class="st">&quot;SalePrice&quot;</span>]</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>df_ames.loc[[<span class="dv">0</span>], distance_features]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="39">
 <div>
 
 
@@ -2299,11 +2299,11 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 </div>
-<div id="cell-8" class="cell" data-execution_count="24">
+<div id="cell-8" class="cell" data-execution_count="40">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_cheaper <span class="op">=</span> df_ames[df_ames[<span class="st">&quot;SalePrice&quot;</span>] <span class="op">&lt;</span> df_ames.loc[<span class="dv">0</span>, <span class="st">&quot;SalePrice&quot;</span>]].copy()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df_cheaper[<span class="st">&quot;distance&quot;</span>] <span class="op">=</span> (((df_cheaper[distance_features] <span class="op">-</span> df_ames.loc[<span class="dv">0</span>, distance_features]) <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)) <span class="op">**</span> <span class="fl">0.5</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df_cheaper.sort_values(<span class="st">&quot;distance&quot;</span>)[features <span class="op">+</span> [<span class="st">&quot;distance&quot;</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div class="cell-output cell-output-display" data-execution_count="40">
 <div>
 
 
@@ -2450,7 +2450,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 </div>
-<div id="cell-9" class="cell" data-execution_count="25">
+<div id="cell-9" class="cell" data-execution_count="41">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">&quot;Gr Liv Area&quot;</span>, <span class="st">&quot;Bedroom AbvGr&quot;</span>, <span class="st">&quot;Bathrooms&quot;</span>, <span class="st">&quot;House Style&quot;</span>]</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.get_dummies(df_ames[features], columns<span class="op">=</span>[<span class="st">&quot;House Style&quot;</span>], dtype<span class="op">=</span><span class="bu">int</span>)</span>
@@ -2465,7 +2465,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>df_cheaper[<span class="st">&quot;manhattan&quot;</span>] <span class="op">=</span> <span class="bu">abs</span>(X_scaled.loc[df_cheaper.index] <span class="op">-</span> X_scaled.loc[<span class="dv">0</span>]).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>df_cheaper.sort_values(<span class="st">&quot;euclidean&quot;</span>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div class="cell-output cell-output-display" data-execution_count="41">
 <div>
 
 
@@ -2624,9 +2624,9 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 </div>
-<div id="cell-10" class="cell" data-execution_count="26">
+<div id="cell-10" class="cell" data-execution_count="42">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_cheaper.sort_values(<span class="st">&quot;manhattan&quot;</span>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="42">
 <div>
 
 
@@ -2788,7 +2788,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <p>Based on the results, house 319 is the closest cheaper match to house 0 with a distance of 261.56. It has 1,894 square feet, 4 bedrooms, 2.5 bathrooms, and was built in 2002. Its sale price was $214,900. The other matches have much larger distances, so house 319 appears to be the strongest similar cheaper option.</p>
 <p>2. Continuing part 1. Suppose that you really like house 0 in the data set, but it is too expensive. Find cheaper homes that are similar to it — in terms of living area, number of bedrooms, number of bathrooms, <strong>and House Style</strong> — by calculating distances from house 0. You might want to try different distance metrics and different scaling methods; how sensitive are your results to these choices?</p>
 <p>Be sure to actually look at the profiles of the homes that your algorithm picked out as most similar. Do they make sense?</p>
-<div id="cell-13" class="cell" data-execution_count="27">
+<div id="cell-13" class="cell" data-execution_count="43">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">&quot;Gr Liv Area&quot;</span>, <span class="st">&quot;Bedroom AbvGr&quot;</span>, <span class="st">&quot;Bathrooms&quot;</span>, <span class="st">&quot;House Style&quot;</span>]</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.get_dummies(df_ames[features], columns<span class="op">=</span>[<span class="st">&quot;House Style&quot;</span>], dtype<span class="op">=</span><span class="bu">int</span>)</span>
@@ -2804,7 +2804,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&quot;House Style&quot;</span>, <span class="st">&quot;Neighborhood&quot;</span>, <span class="st">&quot;Year Built&quot;</span>,</span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&quot;SalePrice&quot;</span>, <span class="st">&quot;distance&quot;</span>]]</span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div class="cell-output cell-output-display" data-execution_count="43">
 <div>
 
 
@@ -2884,7 +2884,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 </div>
-<div id="cell-14" class="cell" data-execution_count="28">
+<div id="cell-14" class="cell" data-execution_count="44">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_cheaper[<span class="st">&quot;manhattan&quot;</span>] <span class="op">=</span> <span class="bu">abs</span>(X.loc[df_cheaper.index] <span class="op">-</span> X.loc[<span class="dv">0</span>]).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">&quot;Gr Liv Area&quot;</span>, <span class="st">&quot;Bedroom AbvGr&quot;</span>, <span class="st">&quot;Bathrooms&quot;</span>]</span>
@@ -2894,11 +2894,11 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>df_cheaper[<span class="st">&quot;euclidean_scaled&quot;</span>] <span class="op">=</span> (((X_scaled.loc[df_cheaper.index] <span class="op">-</span> X_scaled.loc[<span class="dv">0</span>]) <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)) <span class="op">**</span> <span class="fl">0.5</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>df_cheaper[<span class="st">&quot;manhattan_scaled&quot;</span>] <span class="op">=</span> <span class="bu">abs</span>(X_scaled.loc[df_cheaper.index] <span class="op">-</span> X_scaled.loc[<span class="dv">0</span>]).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="cell-15" class="cell" data-execution_count="29">
+<div id="cell-15" class="cell" data-execution_count="45">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_cheaper.sort_values(<span class="st">&quot;manhattan&quot;</span>).head()</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_cheaper.sort_values(<span class="st">&quot;euclidean_scaled&quot;</span>).head()</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>df_cheaper.sort_values(<span class="st">&quot;manhattan_scaled&quot;</span>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="45">
 <div>
 
 
@@ -3061,7 +3061,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <p>3. Continuing parts 1 and 2. Suppose that you really like house 0 in the data set, but it is too expensive. Find cheaper homes that are similar to it, by calculating distances. You can <strong>choose the variables to include, but include both quantitative and categorical variables</strong>. Be sure to actually look at the profiles of the homes that your algorithm picked out as most similar. Do they make sense?</p>
 <p>You might want to try different distance metrics and different scaling methods; how sensitive are your results to these choices?</p>
 <p><em>Hint:</em> There are many variables in the data set. Do not attempt to compute distance based on all the variables! You will want to pare down the number of variables, but be sure to include a mixture of categorical and quantitative variables. Refer to the <a href="https://ww2.amstat.org/publications/jse/v19n3/decock/DataDocumentation.txt">data documentation</a> for information about the variables.</p>
-<div id="cell-18" class="cell" data-execution_count="30">
+<div id="cell-18" class="cell" data-execution_count="46">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">&quot;Gr Liv Area&quot;</span>, <span class="st">&quot;Bedroom AbvGr&quot;</span>, <span class="st">&quot;Bathrooms&quot;</span>,</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Year Built&quot;</span>, <span class="st">&quot;House Style&quot;</span>, <span class="st">&quot;Neighborhood&quot;</span>]</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3083,7 +3083,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;House Style&quot;</span>, <span class="st">&quot;Neighborhood&quot;</span>, <span class="st">&quot;SalePrice&quot;</span>,</span>
 <span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;euclidean&quot;</span>, <span class="st">&quot;manhattan&quot;</span></span>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="46">
 <div>
 
 
@@ -3174,13 +3174,13 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <section id="colleges-similar-to-cal-poly" class="level2">
 <h2 class="anchored" data-anchor-id="colleges-similar-to-cal-poly">Colleges similar to Cal Poly</h2>
 <p>We’ll use data from the <a href="https://collegescorecard.ed.gov/">College Scorecard data</a> to find colleges and universities that are similar to Cal Poly.</p>
-<div id="cell-21" class="cell" data-execution_count="31">
+<div id="cell-21" class="cell" data-execution_count="47">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df_college <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://datasci112.stanford.edu/data/college_attributes.csv&quot;</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>df_college.set_index(<span class="st">&quot;Institution&quot;</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>df_college</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="47">
 <div>
 
 
@@ -3508,13 +3508,13 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 <p>We’ll want to single out Cal Poly, which we can do like this.</p>
-<div id="cell-23" class="cell" data-execution_count="32">
+<div id="cell-23" class="cell" data-execution_count="48">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>school_name <span class="op">=</span> <span class="st">&quot;California Polytechnic State University-San Luis Obispo&quot;</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>cp <span class="op">=</span> df_college.loc[school_name]</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>cp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="48">
 <pre><code>City                                                        San Luis Obispo
 State                                                                    CA
 AdmissionRate                                                          0.33
@@ -3563,9 +3563,9 @@ Name: California Polytechnic State University-San Luis Obispo, dtype: object</co
 </div>
 </div>
 <p>1. Based on only the admission rate and the number of undergraduates, what schools are most similar to Cal Poly? Specify how you’re making this decision.</p>
-<div id="cell-25" class="cell" data-execution_count="33">
+<div id="cell-25" class="cell" data-execution_count="49">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_college.columns</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="49">
 <pre><code>Index([&#39;City&#39;, &#39;State&#39;, &#39;AdmissionRate&#39;, &#39;Undergraduates&#39;,
        &#39;CarnegieClassification&#39;, &#39;Ownership&#39;, &#39;PCIP01&#39;, &#39;PCIP03&#39;, &#39;PCIP04&#39;,
        &#39;PCIP05&#39;, &#39;PCIP09&#39;, &#39;PCIP10&#39;, &#39;PCIP11&#39;, &#39;PCIP12&#39;, &#39;PCIP13&#39;, &#39;PCIP14&#39;,
@@ -3576,7 +3576,7 @@ Name: California Polytechnic State University-San Luis Obispo, dtype: object</co
       dtype=&#39;str&#39;)</code></pre>
 </div>
 </div>
-<div id="cell-26" class="cell" data-execution_count="34">
+<div id="cell-26" class="cell" data-execution_count="50">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">&quot;AdmissionRate&quot;</span>, <span class="st">&quot;Undergraduates&quot;</span>]</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df_college[features].copy()</span>
@@ -3585,7 +3585,7 @@ Name: California Polytechnic State University-San Luis Obispo, dtype: object</co
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>df_college[<span class="st">&quot;distance&quot;</span>] <span class="op">=</span> (((X <span class="op">-</span> X.loc[school_name]) <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)) <span class="op">**</span> <span class="fl">0.5</span></span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>df_college.sort_values(<span class="st">&quot;distance&quot;</span>).head(<span class="dv">10</span>)[features <span class="op">+</span> [<span class="st">&quot;distance&quot;</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="50">
 <div>
 
 
@@ -3673,7 +3673,7 @@ Name: California Polytechnic State University-San Luis Obispo, dtype: object</co
 </div>
 <p>The most similar schools to Cal Poly are those with admission rates and undergraduate populations closest to Cal Poly, with the University of Central Florida appearing to be the closest match based on the smallest standardized Euclidean distance.</p>
 <p>2. Now consider the admission rate, the number of undergraduates, and also the <a href="https://en.wikipedia.org/wiki/Carnegie_Classification_of_Institutions_of_Higher_Education">Carnegie classification</a> of the type of school, and the ownership (public, private, etc.) Based on these variables, what schools are most similar to Cal Poly? Specify how you’re making this decision.</p>
-<div id="cell-29" class="cell" data-execution_count="35">
+<div id="cell-29" class="cell" data-execution_count="51">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">&quot;AdmissionRate&quot;</span>, <span class="st">&quot;Undergraduates&quot;</span>,</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;CarnegieClassification&quot;</span>, <span class="st">&quot;Ownership&quot;</span>]</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3687,7 +3687,7 @@ Name: California Polytechnic State University-San Luis Obispo, dtype: object</co
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>df_college[<span class="st">&quot;distance2&quot;</span>] <span class="op">=</span> (((X <span class="op">-</span> X.loc[school_name]) <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)) <span class="op">**</span> <span class="fl">0.5</span></span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>df_college.sort_values(<span class="st">&quot;distance2&quot;</span>).head(<span class="dv">10</span>)[features <span class="op">+</span> [<span class="st">&quot;distance2&quot;</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="51">
 <div>
 
 
@@ -3800,7 +3800,7 @@ Name: California Polytechnic State University-San Luis Obispo, dtype: object</co
 <p>The closest schools are mostly public Master’s Colleges with admission rates and undergraduate enrollments similar to Cal Poly, which makes sense because the categorical variables now push schools with the same Carnegie classification and ownership closer in the ranking.</p>
 <p>3. The columns whose names begin with “PCIP” contain the proportions of students at each school studying various fields (e.g., Engineering, Psychology). Each field is represented by a two-digit code called the <a href="https://nces.ed.gov/ipeds/cipcode/browse.aspx?y=55">CIP code</a>.</p>
 <p>If we only consider the proportions of students studying various fields, what schools are most similar to Cal Poly? Specify how you’re making this decision.</p>
-<div id="cell-32" class="cell" data-execution_count="36">
+<div id="cell-32" class="cell" data-execution_count="52">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pcip_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> df_college.columns <span class="cf">if</span> col.startswith(<span class="st">&quot;PCIP&quot;</span>)]</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df_college[pcip_cols].copy()</span>
@@ -3808,7 +3808,7 @@ Name: California Polytechnic State University-San Luis Obispo, dtype: object</co
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>df_college[<span class="st">&quot;pcip_distance&quot;</span>] <span class="op">=</span> (((X <span class="op">-</span> X.loc[school_name]) <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)) <span class="op">**</span> <span class="fl">0.5</span></span>
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>df_college.sort_values(<span class="st">&quot;pcip_distance&quot;</span>).head(<span class="dv">10</span>)[pcip_cols <span class="op">+</span> [<span class="st">&quot;pcip_distance&quot;</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="52">
 <div>
 
 
